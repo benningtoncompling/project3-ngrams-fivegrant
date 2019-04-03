@@ -1,23 +1,40 @@
 import time, sys
 
-def ngrams(count, material):
-    content = ''
+class Corpus:
+    def __init__(self, material):
+        self.tokens = []
+        self.ngrams = {} 
+        self.ngrams_count = {} 
+        with open('r', material) as data:
+            for line in data.readlines():
+                l = line.replace('\n', '').lower()
+                l = l.split(' ')
+                l = ['<s>'] + l + ['<\s>']
+                self.tokens += l
+
+    def ngrams(self, count):
+        if count not in self.ngrams:
+            ngram_list = [] 
+            for start in range(len(self.tokens) - (count - 1)):
+                ngram = []
+                for index_iter in range(count):
+                    ngram += [tokens[start + index_iter]]
+                ngram_list.append(ngram)
+            self.ngrams.update({count : ngram_list})
     
 
-def bigram_count(material):
-    d = {}
-    material = ngrams(count, material)
-    for bi in material:
-        key, value = [bi[0].lower(),bi[1].lower()]
-        print(str(key) + ' ' + str(value))
-        if bi[0] not in d:
-            d.update({key : {value:1}})
-        else:
-            if value not in d[key]:
-                d[key].update({value:1})
+    def n_count(self, select):
+        d = {}
+        sample = self.ngrams[select]
+        for bi in sample:
+            if bi[0] not in d:
+                d.update({key : {value:1}})
             else:
-                d[key][value] += 1
-    return d
+                if value not in d[key]:
+                    d[key].update({value:1})
+                else:
+                    d[key][value] += 1
+        return d
 
 def probability(d, phrases):
     print(d)
@@ -65,3 +82,4 @@ aa = ['a', 'the', 'she', 'he', 'they']
 for thing in aa:
     print(bigrams_list[thing])
 
+#"""
