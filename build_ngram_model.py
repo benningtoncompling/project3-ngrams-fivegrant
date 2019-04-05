@@ -109,17 +109,11 @@ class Corpus:
                 line[0] = str(line[0])
                 content += ' '.join(line) + '\n'
         return content
-            
-q = Corpus('./data/input/dickens_test.txt')
-q.build(2)
-q.build(3)
-print(q)
 
-"""
+
 corp = Corpus(sys.argv[1])
 corp.build(2)
 corp.build(3)
 with open(sys.argv[2], 'w') as output:
-    output.write(corp)
+    output.write(str(corp))
     
-"""
