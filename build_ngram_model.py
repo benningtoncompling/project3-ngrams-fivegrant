@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import math, sys, pprint
+import math, sys
 
 class Corpus:
     def __init__(self, material):
@@ -20,7 +20,7 @@ class Corpus:
                 for unigram in content:
                     if unigram in unigrams:
                         unigrams[unigram][0] += 1
-                    else:
+                    elif unigram != '<s>':
                         unigrams.update({unigram : [1, 0]}) #, unigram]})
                         token_collect[0] += 1
 
@@ -91,14 +91,14 @@ class Corpus:
             for ngram, values in self.ngrams_count[nselect].items():
                 if nselect != 1:
                     for pos in self.ngrams_count[nselect][ngram]:
-                        cell = [values[pos][0]]
-                        cell += [str(values[pos][2])]
+                        cell = [str(values[pos][2])]
+                        cell += [values[pos][0]]
                         cell += [str(values[pos][1])]
                         cell += [str(math.log(values[pos][1]))]
                         container += [cell]
                 else:
-                    cell = [values[0]]
-                    cell += [str(ngram)]
+                    cell = [str(ngram)]
+                    cell += [values[0]]
                     cell += [str(values[1])]
                     cell += [str(math.log(float(values[1])))]
                     container += [cell]
@@ -106,6 +106,7 @@ class Corpus:
             present = sorted(container)
             present.reverse()
             for line in present:
+                line[0], line[1] = line[1], line[0]
                 line[0] = str(line[0])
                 line[1],line[3] = line[3], line[1]
                 line[1],line[2] = line[2], line[1]
