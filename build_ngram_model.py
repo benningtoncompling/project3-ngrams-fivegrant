@@ -92,21 +92,23 @@ class Corpus:
                 if nselect != 1:
                     for pos in self.ngrams_count[nselect][ngram]:
                         cell = [values[pos][0]]
+                        cell += [str(values[pos][2])]
                         cell += [str(values[pos][1])]
                         cell += [str(math.log(values[pos][1]))]
-                        cell += [str(values[pos][2])]
                         container += [cell]
                 else:
                     cell = [values[0]]
+                    cell += [str(ngram)]
                     cell += [str(values[1])]
                     cell += [str(math.log(float(values[1])))]
-                    cell += [str(ngram)]
                     container += [cell]
 
             present = sorted(container)
             present.reverse()
             for line in present:
                 line[0] = str(line[0])
+                line[1],line[3] = line[3], line[1]
+                line[1],line[2] = line[2], line[1]
                 content += ' '.join(line) + '\n'
         return content
 
@@ -116,4 +118,7 @@ corp.build(2)
 corp.build(3)
 with open(sys.argv[2], 'w') as output:
     output.write(str(corp))
+
+#stackoverflow.com/questions/2493920/how-to-switch-position-of-two-items-in-a-python-list
+#^ How I swapped to elements in a list
     
