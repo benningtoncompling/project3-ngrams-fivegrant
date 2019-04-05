@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-import math, sys, time
+import math, sys
 
 class Corpus:
     def __init__(self, material):
-        start = time.time()
         self.tokens = []
         self.ngrams = {} 
         self.ngrams_count = {} 
@@ -36,13 +35,9 @@ class Corpus:
             self.ngrams_count.update({1 : unigrams})
             self.token_count.update({1 : token_collect})
 
-        finish = str(round(time.time() - start, 2))
-        print('Corpus initialized in ' + finish + ' seconds')
 
     def build(self, count):
         if count not in self.ngrams:
-            start = time.time()
-
             #Generates N-grams where count > 1
             token_collect = [0, 0]
             ngram_list = [] 
@@ -78,10 +73,6 @@ class Corpus:
                     token_collect[0] += 1
             self.token_count.update({count : token_collect})
             self.ngrams_count.update({count : counts})
-            finish = str(round(time.time('seconds') - start, 2))
-            print(str(count) + '-grams analyzed in ' + finish + ' seconds')
-        else:
-            print(str(count) + '-gram already exists')
 
     def __str__(self):
         content = '\data\ \n'
@@ -99,11 +90,13 @@ class Corpus:
                         cell += str(values[pos][0]) + ' '
                         cell += str(math.log(values[pos][0])) + ' '
                         cell += str(values[pos][2]) + '\n'
+                        container += [cell]
                 else:
                     cell = str(values[1]) + ' '
                     cell += str(values[0]) + ' '
                     cell += str(math.log(float(values[0]))) + ' '
                     cell += str(ngram) + '\n'
+                    container += [cell]
 
             for line in sorted(container):
                 content += line
