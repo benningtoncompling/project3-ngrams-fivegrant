@@ -54,16 +54,16 @@ class Corpus:
             #didnt wanna break code + understanding when name is changed
             sample = ngram_list 
             for ngram in sample:
-                title = ' '.join(ngram[:-1])
+                title = tuple(ngram[:-1])
                 if title in counts:
-                    if ngram[0] in counts[title]:
-                        counts[title][ngram[0]][0] += 1
+                    if ngram[-1] in counts[title]:
+                        counts[title][ngram[-1]][0] += 1
                     else:
-                        counts[title].update({ngram[0]:[1,0, 
+                        counts[title].update({ngram[-1]:[1,0, 
                          ' '.join(ngram)]})
                         token_collect[0] += 1
                 else:
-                    counts.update({title:{ngram[0]:[1, 1, 
+                    counts.update({title:{ngram[-1]:[1, 1, 
                      ' '.join(ngram)]}})
                     token_collect[0] += 1
 
@@ -113,7 +113,7 @@ class Corpus:
 q = Corpus('./data/input/dickens_test.txt')
 q.build(2)
 q.build(3)
-str(q) #print(q)
+print(q)
 
 """
 corp = Corpus(sys.argv[1])
