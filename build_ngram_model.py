@@ -13,7 +13,7 @@ class Corpus:
             for line in data.readlines():
                 content = line.replace('\n', '').lower()
                 content = content.split(' ')
-                content = ['<s>'] + content + ['<\s>']
+                content = ['<s>'] + content + ['</s>']
                 self.tokens += content
 
                 #Unigram Counts
@@ -44,7 +44,7 @@ class Corpus:
                 ngram = []
                 for index_iter in range(count):
                     ngram += [self.tokens[start + index_iter]]
-                if not ('<\s>' in ngram and '<\s>' != ngram[-1]): 
+                if not ('</s>' in ngram and '</s>' != ngram[-1]): 
                     ngram_list.append(ngram)
             self.ngrams.update({count : ngram_list})
             token_collect[1] = len(ngram_list)
