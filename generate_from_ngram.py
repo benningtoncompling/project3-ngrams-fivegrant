@@ -28,4 +28,3 @@ class Generator:
         while(focus != '</s>')
             select = random.random()
             for prob in self.ngrams:
-                if  < prob

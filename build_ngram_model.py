@@ -16,7 +16,7 @@ class Corpus:
                 content = ['<s>'] + content + ['</s>']
                 self.tokens += content
 
-                #Unigram Counts
+                # Unigram Counts
                 for unigram in content:
                     if unigram in unigrams:
                         unigrams[unigram][0] += 1
@@ -30,14 +30,14 @@ class Corpus:
                 unigrams[unigram][1] = \
                  unigrams[unigram][0]/token_collect[1]
 
-            #Saving the Unigrams
+            # Saving the Unigrams
             self.ngrams_count.update({1 : unigrams})
             self.token_count.update({1 : token_collect})
 
 
     def build(self, count):
         if count not in self.ngrams:
-            #Generates N-grams where count > 1
+            # Generates N-grams where count > 1
             token_collect = [0, 0]
             ngram_list = [] 
             for start in range(len(self.tokens) - count - 1):
@@ -49,9 +49,9 @@ class Corpus:
             self.ngrams.update({count : ngram_list})
             token_collect[1] = len(ngram_list)
             
-            #Calculates Counts
+            # Calculates Counts
             counts = {}
-            #didnt wanna break code + understanding when name is changed
+            # didnt wanna break code + understanding when name is changed
             sample = ngram_list 
             for ngram in sample:
                 title = tuple(ngram[:-1])
@@ -67,7 +67,7 @@ class Corpus:
                      ' '.join(ngram)]}})
                     token_collect[0] += 1
 
-            #Probabilities
+            # Probabilities
             for ngram in counts:
                 total = 0 
                 for key, info in counts[ngram].items():
@@ -82,44 +82,40 @@ class Corpus:
     def __str__(self):
         content = '\data\ \n'
         for typevtoken in sorted(self.token_count.keys()):
-            content += '%s-ngrams: types=%s tokens=%s \n' % (
-             str(typevtoken), str(self.token_count[typevtoken][0]), 
-             str(self.token_count[typevtoken][1]))
+            content += f'{typevtoken}-ngrams: types={self.token_count[typevtoken][0]} tokens={self.token_count[typevtoken][0]}\n\n'
         for nselect in sorted(self.ngrams_count.keys()):
-            content += '\\%s-grams:\n' % str(nselect)
+            content += f'\\{nselect}-grams:\n'
             container = []
             for ngram, values in self.ngrams_count[nselect].items():
                 if nselect != 1:
                     for pos in self.ngrams_count[nselect][ngram]:
-                        cell = [str(values[pos][2])]
-                        cell += [values[pos][0]]
+                        cell = [values[pos][0]]
                         cell += [str(values[pos][1])]
                         cell += [str(math.log(values[pos][1]))]
+                        cell += [str(values[pos][2])]
                         container += [cell]
                 else:
-                    cell = [str(ngram)]
-                    cell += [values[0]]
+                    cell = [values[0]]
                     cell += [str(values[1])]
                     cell += [str(math.log(float(values[1])))]
+                    cell += [str(ngram)]
                     container += [cell]
 
             present = sorted(container)
             present.reverse()
             for line in present:
-                line[0], line[1] = line[1], line[0]
                 line[0] = str(line[0])
-                line[1],line[3] = line[3], line[1]
-                line[1],line[2] = line[2], line[1]
                 content += ' '.join(line) + '\n'
         return content
 
 
-corp = Corpus(sys.argv[1])
-corp.build(2)
-corp.build(3)
-with open(sys.argv[2], 'w') as output:
-    output.write(str(corp))
+if __name__ == "__main__":
+    corp = Corpus(sys.argv[1])
+    corp.build(2)
+    corp.build(3)
+    with open(sys.argv[2], 'w') as output:
+        output.write(str(corp))
 
-#stackoverflow.com/questions/2493920/how-to-switch-position-of-two-items-in-a-python-list
-#^ How I swapped to elements in a list
+# stackoverflow.com/questions/2493920/how-to-switch-position-of-two-items-in-a-python-list
+# ^ How I swapped to elements in a list
     
