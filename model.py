@@ -5,21 +5,23 @@ class Model:
         self.size = ngram_size
         self.ngrams = {}
 
-        total_probability = 0
         if self.size == 1:
+            total_probability = 0
             for ngram in material:
                 self.ngrams.update({total_probability: ngram[3]})
                 total_probability += float(ngram[1]) 
+
         else:
+            probability_add = {}
             for ngram in material:
                 key, result = ' '.join(ngram[3].split()[:-1]), ngram[3].split()[-1]
                 if key not in self.ngrams:
-                    self.ngrams.update({key:{float(ngram[1]): result}})
-                else:
-                    self.ngrams[key].update({total_probability: result})
-                    total_probability = max([prb for prb in self.ngrams[key]])
-                    total_probability += float(ngram[1])
+                    self.ngrams.update({key:{0: result}})
+                    probability_add.update({key: float(ngram[1])})
 
+                else:
+                    self.ngrams[key].update({probability_add[key]: result})
+                    probability_add[key] += float(ngram[1])
             
     def __str__(self):
         content = '(' + str(int(self.size)) + ')\n'
@@ -33,8 +35,6 @@ class Model:
                     content += f'\t{prob} : {result}\n'
         content += '\n'
         return content
-        
-
 
 # Creates models and allows access to them later. 
 # Also, allows you to write output 
