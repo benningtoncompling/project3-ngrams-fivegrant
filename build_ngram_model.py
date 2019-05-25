@@ -80,9 +80,12 @@ class Corpus:
             self.ngrams_count.update({count : counts})
 
     def __str__(self):
-        content = '\data\ \n'
+        content = '\data\\\n'
         for typevtoken in sorted(self.token_count.keys()):
-            content += f'{typevtoken}-ngrams: types={self.token_count[typevtoken][0]} tokens={self.token_count[typevtoken][0]}\n\n'
+            content += f'{typevtoken}-ngrams: ' 
+            content += f'types={self.token_count[typevtoken][0]} ' 
+            content += f'tokens={self.token_count[typevtoken][1]}\n'
+        content += '\n'
         for nselect in sorted(self.ngrams_count.keys()):
             content += f'\\{nselect}-grams:\n'
             container = []
@@ -106,6 +109,10 @@ class Corpus:
             for line in present:
                 line[0] = str(line[0])
                 content += ' '.join(line) + '\n'
+            content += '\n'
+
+        # Saw this in your example model so I put it in. Not in the pdf though
+        content += '\\end\\'
         return content
 
 
