@@ -8,17 +8,18 @@ class Model:
         total_probability = 0
         if self.size == 1:
             for ngram in material:
-                total_probability += float(ngram[1]) 
                 self.ngrams.update({total_probability: ngram[3]})
+                total_probability += float(ngram[1]) 
         else:
             for ngram in material:
                 key, result = ' '.join(ngram[3].split()[:-1]), ngram[3].split()[-1]
                 if key not in self.ngrams:
                     self.ngrams.update({key:{float(ngram[1]): result}})
                 else:
+                    self.ngrams[key].update({total_probability: result})
                     total_probability = max([prb for prb in self.ngrams[key]])
                     total_probability += float(ngram[1])
-                    self.ngrams[key].update({total_probability: result})
+
             
     def __str__(self):
         content = '(' + str(int(self.size)) + ')\n'
@@ -60,9 +61,12 @@ class Model_Collection:
                 else:
                     data = None
 
-        for n in self.models:
+        for size in self.models:
             # Transforming the raw data floato an Ngram
-            self.models[n] = Model(self.models[n], n)
+            self.models[size] = Model(self.models[size], size)
+
+    def get_model(self, size):
+        return self.models[size]
 
     def __str__(self):
         content = ''
@@ -70,6 +74,3 @@ class Model_Collection:
             content += str(mod)
             content += '\n\n'
         return content
-
-if __name__ == '__main__':
-    dickens = Model_Collection('data/examples/dickens_model.txt')
